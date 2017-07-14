@@ -1,0 +1,99 @@
+.containerw
+{
+	width: 95%;
+	margin: 0 auto;
+	}
+
+.comentare
+{
+text-align: left;	
+}
+
+.limpiar
+{
+width: 740px;
+height: 600px;
+float:left;
+	}
+
+.leftchat { 
+width: 720px;
+height: 550px;
+position: relative;
+display: inline-block;
+}
+
+.rightchat { 
+display: inline-block;
+height: 600px;	
+}
+
+.leftchatb { 
+width: 460px;
+position: relative;
+display: inline-block;
+}
+
+.rightchatb { 
+display: inline-block;
+width: 460px;
+}
+
+
+#tabs {
+  overflow: hidden;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  font-weight: 600;
+  font-smoth: always;
+}
+
+#tabs li {
+  float: left;
+  margin: 0 0 0 0;
+}
+
+#tabs a {
+  
+  position: relative;
+  background: #FFF;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  float: left;
+  text-decoration: none;
+  color: #000;
+  padding-left: 40px;	
+  padding-right: 40px;
+
+}
+
+#tabs a:hover,
+#tabs a:hover::after,
+#tabs a:focus,
+#tabs a:focus::after {
+  background: #b5d8ea;
+}
+
+#tabs a:focus {
+  outline: 0;
+}
+
+
+#tabs #current a,
+#tabs #current a::after {
+  background: #b8c0c4;
+  z-index: 3;
+}
+
+#content {
+  background: #b8c0c4;
+  padding: 20px;
+  line-height:40px;
+  position: relative;
+  z-index: 2; 
+  background-image: linear-gradient(to bottom, #b8c0c4, #61737c); 
+
+}

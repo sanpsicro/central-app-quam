@@ -1,0 +1,58 @@
+<?php  if(empty($_SESSION["valid_user"])){die();} ?> 
+
+
+<table width="218" border="0" cellspacing="0" cellpadding="0">
+
+              <tr> 
+                  
+                <td align="right" valign="top"> <span class="submenu"> 
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tablesubmenu">
+                    <tr> 
+                      <td width="14"><img src="img/arrow.gif" width="9" height="15" /></td>
+                      <td width="176"><a href="?module=main" class="linksmenu">Home</a></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"><img src="img/hline1.gif" /></td>
+                    </tr>
+					                    <tr> 
+                      <td width="14"><img src="img/arrow.gif" width="9" height="15" /></td>
+                      <td width="176"><a href="?module=usuarios" class="linksmenu">Usuarios</a></td>
+                    </tr>
+					  <tr>
+                      <td colspan="2"><img src="img/hline1.gif" /></td>
+                    </tr>
+					        <tr> 
+                      <td width="14"><img src="img/arrow.gif" width="9" height="15" /></td>
+                      <td width="176"><a href="?module=clientes" class="linksmenu">Clientes</a></td>
+                    </tr>
+					
+					<tr>
+                      <td colspan="2"><img src="img/hline1.gif" /></td>
+                    </tr>
+					        <tr> 
+                      <td width="14"><img src="img/arrow.gif" width="9" height="15" /></td>
+                      <td width="176"><a href="?module=polizas" class="linksmenu">Polizas</a></td>
+                    </tr>
+		  <?php  
+$db = mysql_connect($usr_host,$usr_username,$usr_pass);
+mysql_select_db($usr_database,$db);
+$result = mysql_query("SELECT * from administradores where usuario = '$valid_user'",$db);
+$checkamail=mysql_result($result,0,"mail");
+$checadominio=explode("@",$checkamail);
+$selecdom = count($checadominio)-1; 
+if($checadominio[$selecdom]=="e21systemgroup.com" or $checadominio[$selecdom]=="e21sg.com"){
+echo'
+                    <tr>
+                      <td colspan="2"><img src="img/hline1.gif" /></td>
+                    </tr>
+
+<tr>
+<td><img src="img/arrow.gif" width="9" height="15" /></td>
+<td><a href="?module=webmail" class="linksmenu">Webmail</a></td>
+</tr>';
+}
+?>
+                </table>
+                  </span></td>
+              </tr>
+  </table>

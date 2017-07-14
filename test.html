@@ -1,0 +1,49 @@
+<html>
+<head>
+<title>Ajax auto-suggest / auto-complete | BrandSpankingNew</title>
+
+<script type="text/javascript" src="bsn.AutoSuggest_2.1_comp.js" charset="utf-8"></script>
+
+</head>
+<body>
+
+
+<form method="get" action="">
+	<small style="float:right">Hidden ID Field: <input type="text" id="testid" value="" style="font-size: 10px; width: 20px;" disabled="disabled" /></small>
+	<label for="testinput">Person</label>
+	<input style="width: 200px" type="text" id="testinput" value="" /> 
+	<input type="submit" value="submit" />
+</form>
+
+<form method="get" action="">
+	<label for="testinput_xml">Person</label>
+	<input type="text" id="testinput_xml" value="" style="width:300px" /> 
+	<br /><br /><input type="submit" value="submit" />
+</form>
+
+
+<script type="text/javascript">
+	var options = {
+		script:"test.php?json=true&",
+		varname:"input",
+		json:true,
+		shownoresults:false,
+		callback: function (obj) { document.getElementById('testid').value = obj.id; }
+	};
+	var as_json = new bsn.AutoSuggest('testinput', options);
+	
+	
+	var options_xml = {
+		script: function (input) { return "test.php?input="+input+"&testid="+document.getElementById('testid').value; },
+		varname:"input"
+	};
+	var as_xml = new bsn.AutoSuggest('testinput_xml', options_xml);
+</script>
+
+
+
+
+
+
+
+</body>

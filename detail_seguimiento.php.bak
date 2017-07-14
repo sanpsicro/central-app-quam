@@ -1,0 +1,653 @@
+<script type="text/javascript">
+function creaAjax(){
+         var objetoAjax=false;
+         try {
+          /*Para navegadores distintos a internet explorer*/
+          objetoAjax = new ActiveXObject("Msxml2.XMLHTTP");
+         } catch (e) {
+          try {
+                   /*Para explorer*/
+                   objetoAjax = new ActiveXObject("Microsoft.XMLHTTP");
+                   }
+                   catch (E) {
+                   objetoAjax = false;
+          }
+         }
+
+         if (!objetoAjax && typeof XMLHttpRequest!='undefined') {
+          objetoAjax = new XMLHttpRequest();
+         }
+         return objetoAjax;
+}
+
+/*----
+*/   
+function FAjax (url,capa,valores,metodo)
+{
+          var ajax=creaAjax();
+          var capaContenedora = document.getElementById(capa);
+
+/*Creamos y ejecutamos la instancia si el metodo elegido es POST*/
+if(metodo.toUpperCase()=='POST'){
+         ajax.open ('POST', url, true);
+         ajax.onreadystatechange = function() {
+         if (ajax.readyState==1) {
+                          capaContenedora.innerHTML="<table cellpadding=3 cellspacing=3 width=100% bgcolor=white><tr><td height=150 align=middle valign=middle><img src=\"img/loading.gif\"> <b><font color=\"#eeeeee\">Cargando.......</font></b></td></tr></table>";
+         }
+         else if (ajax.readyState==4){
+                   if(ajax.status==200)
+                   {
+                        document.getElementById(capa).innerHTML=ajax.responseText;
+                   }
+                   else if(ajax.status==404)
+                                             {
+
+                            capaContenedora.innerHTML = "La direccion no existe";
+                                             }
+                           else
+                                             {
+                            capaContenedora.innerHTML = "Error: ".ajax.status;
+                                             }
+                                    }
+                  }
+         ajax.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+         ajax.send(valores);
+         return;
+}
+/*Creamos y ejecutamos la instancia si el metodo elegido es GET*/
+if (metodo.toUpperCase()=='GET'){
+
+         ajax.open ('GET', url, true);
+         ajax.onreadystatechange = function() {
+         if (ajax.readyState==1) {
+                                      capaContenedora.innerHTML="<table cellpadding=3 cellspacing=3 width=100% bgcolor=white><tr><td height=150 align=middle valign=middle><img src=\"img/loading.gif\" align=\"absmiddle\"> <b><font color=\"#cccccc\" size=3 face=arial>Cargando...</font></b></td></tr></table>";
+         }
+         else if (ajax.readyState==4){
+                   if(ajax.status==200){
+                                             document.getElementById(capa).innerHTML=ajax.responseText;
+                   }
+                   else if(ajax.status==404)
+                                             {
+
+                            capaContenedora.innerHTML = "La direccion no existe";
+                                             }
+                                             else
+                                             {
+                            capaContenedora.innerHTML = "Error: ".ajax.status;
+                                             }
+                                    }
+                  }
+         ajax.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+         ajax.send(null);
+         return
+}
+} 
+</script>
+
+<script type="text/javascript">
+function confirmborra(idex,tercero) { 
+if (confirm("�Est� seguro de querer eliminar al tercero?\n")) { 
+FAjax('terceros_editado.php?id='+idex+'&idtercero='+tercero+'&caso=borrar&flim-flam='+new Date().getTime(),'terceros','','get');
+}
+}
+</script>
+<script type="text/javascript" src="subcombo.js"></script>
+
+<?php  
+if($set_date=="arribo"){
+mysql_connect($host,$username,$pass);
+$sSQL="UPDATE general SET arribo=now() where id='$id'";
+mysqli_query($database, "$sSQL");
+}
+
+if($set_date=="contacto"){
+mysql_connect($host,$username,$pass);
+$sSQL="UPDATE general SET contacto=now() where id='$id'";
+mysqli_query($database, "$sSQL");
+}
+
+
+if($set_status=="concluido"){
+mysql_connect($host,$username,$pass);
+$sSQL="UPDATE general SET status='concluido', ultimostatus=now() where id='$id'";
+mysqli_query($database, "$sSQL");
+}
+
+
+if(empty($_SESSION["valid_user"])){die();} 
+$db = mysql_connect($host,$username,$pass);
+mysql_select_db($database,$db);
+$result = mysql_query("SELECT * from general where id = '$id'",$db);
+$servicio=mysql_result($result,0,"servicio");
+$contrato=mysql_result($result,0,"contrato");
+$cliente=mysql_result($result,0,"idCliente");
+$fecha_recepcion=mysql_result($result,0,"fecha_recepcion");
+$fexa1=explode(" ",$fecha_recepcion);
+$fexa1d=explode("-",$fexa1[0]);
+$fecha_suceso=mysql_result($result,0,"fecha_suceso");
+$fexa2=explode(" ",$fecha_suceso);
+$fexa2d=explode("-",$fexa2[0]);
+$reporta=mysql_result($result,0,"reporta");
+$tel_reporta=mysql_result($result,0,"tel_reporta");
+$num_contrato=mysql_result($result,0,"num_contrato");
+$expediente=mysql_result($result,0,"expediente");
+$num_cliente=mysql_result($result,0,"num_cliente");
+$num_siniestro=mysql_result($result,0,"num_siniestro");
+$ajustador=mysql_result($result,0,"ajustador");
+$usuario=mysql_result($result,0,"usuario");
+$motivo_servicio=mysql_result($result,0,"motivo_servicio");
+$auto_marca=mysql_result($result,0,"auto_marca");
+$auto_tipo=mysql_result($result,0,"auto_tipo");
+$auto_modelo=mysql_result($result,0,"auto_modelo");
+$auto_color=mysql_result($result,0,"auto_color");
+$auto_placas=mysql_result($result,0,"auto_placas");
+$ubicacion_requiere=mysql_result($result,0,"ubicacion_requiere");
+$ubicacion_referencias=mysql_result($result,0,"ubicacion_referencias");
+$ubicacion_estado=mysql_result($result,0,"ubicacion_estado");
+$ubicacion_municipio=mysql_result($result,0,"ubicacion_municipio");
+$ubicacion_ciudad=mysql_result($result,0,"ubicacion_ciudad");
+$observaciones=mysql_result($result,0,"observaciones");
+$reporte_cliente=mysql_result($result,0,"reporte_cliente");
+$probestar=mysql_result($result,0,"Proveedor");
+$convenio=mysql_result($result,0,"convenio");
+$inciso=mysql_result($result,0,"inciso");
+
+$result = mysql_query("SELECT * from servicios where id = '$servicio'",$db);
+$servicio=mysql_result($result,0,"servicio");
+$campos=mysql_result($result,0,"campos");
+$camposex=explode(",",$campos);
+$result = mysql_query("SELECT * from Cliente where idCliente = '$cliente'",$db);
+$cliente=mysql_result($result,0,"nombre");
+$result = mysql_query("SELECT * from Estado where idEstado = '$ubicacion_estado'",$db);
+$ubicacion_estado=mysql_result($result,0,"NombreEstado");
+$result = mysql_query("SELECT * from Municipio where idMunicipio = '$ubicacion_municipio'",$db);
+$ubicacion_municipio=mysql_result($result,0,"NombreMunicipio");
+
+$result = mysql_query("SELECT * from Provedor where id = '$probestar'",$db);
+$probestar=mysql_result($result,0,"nombre");
+
+
+?> 
+<table border=0 width=100% cellpadding=0 cellspacing=0>
+ <tr> 
+      <td height="44" align="left"><table width=100% cellpadding=0 cellspacing=0><tr>
+      <td width="50%"><span class="maintitle">Detalle del Expediente <?php  echo $expediente;?></span></td>
+      <td width=50% align="right"><span class="maintitle">Prov: <?php  echo $probestar;?></span></td>
+
+      </tr></table></td></tr>
+
+<tr>
+
+  <td>
+
+  <table width="100%" border="0" cellspacing="3" cellpadding="3">
+    <tr>
+      <td bgcolor="#CCCCCC" colspan=3><strong>Status del caso</strong></td>
+    </tr></table> <div id="statuscaso"><?php  
+    include("status_caso.php");
+	?></div>  
+    <?php  
+	$ivx=0;
+$checa_array=array_search("informacion_caso",$camposex);
+$checa_array2=array_search("num_contrato",$camposex);
+$checa_array3=array_search("reporta",$camposex);
+$checa_array4=array_search("tel_reporta",$camposex);
+$checa_array5=array_search("fecha_suceso",$camposex);
+$checa_array6=array_search("convenio",$camposex);
+$checa_array7=array_search("expediente",$camposex);
+$checa_array8=array_search("num_cliente",$camposex);
+$checa_array9=array_search("num_siniestro",$camposex);
+$checa_array10=array_search("inciso",$camposex);
+$checa_array11=array_search("usuario",$camposex);
+$checa_array12=array_search("reporte_cliente",$camposex);
+if($checa_array===FALSE && $checa_array2===FALSE && $checa_array3===FALSE  && $checa_array4===FALSE && $checa_array5===FALSE && $checa_array6===FALSE && $checa_array7===FALSE && $checa_array8===FALSE && $checa_array9===FALSE && $checa_array10===FALSE && $checa_array11===FALSE && $checa_array12===FALSE){} else{
+	?>
+    <table width="100%" border="0" cellspacing="3" cellpadding="3">
+    <tr>
+      <td bgcolor="#CCCCCC" colspan=3><strong>Informaci&oacute;n del caso</strong></td>
+      </tr>
+    <tr>
+     <td width="33%" bgcolor="#ffffff"><strong>Servicio solicitado:</strong> <?php  echo $servicio;?></td>
+      <td width="33%" bgcolor="#ffffff"><strong>Contrato:</strong> <?php  echo $contrato;?></td>
+      <td width="33%" bgcolor="#ffffff"><strong>Cliente:</strong> <?php  echo $cliente;?></td>
+    </tr>
+    <tr>
+      <td bgcolor="#ffffff"><strong>Fecha de recepci&oacute;n:</strong> <?php  echo ''.$fexa1d[2].'/'.$fexa1d[1].'/'.$fexa1d[0].' '.$fexa1[1].'';?></td>
+       <?php  $ivx++; 			            if($ivx=="3"){echo'</tr><tr>'; $ivx=0;}?>
+      
+<?php  
+$checa_arrayx=array_search("reporta",$camposex);
+if($checa_arrayx===FALSE){} else{
+?>    
+      <td bgcolor="#ffffff"><strong>Reporta:</strong> <?php  echo $reporta;?></td>
+      
+      <?php  $ivx++; 
+			            if($ivx=="3"){echo'</tr><tr>'; $ivx=0;}
+			}?>
+<?php  
+$checa_arrayx=array_search("tel_reporta",$camposex);
+if($checa_arrayx===FALSE){} else{
+?>          
+      <td bgcolor="#ffffff"><strong>Tel&eacute;fono de quien reporta:</strong> <?php  echo $tel_reporta;?></td>      
+            <?php  $ivx++; 
+			            if($ivx=="3"){echo'</tr><tr>'; $ivx=0;}
+			}?>
+            
+<?php  
+$checa_arrayx=array_search("fecha_suceso",$camposex);
+if($checa_arrayx===FALSE){} else{
+?>          
+      <td bgcolor="#ffffff"><strong>Fecha del suceso:</strong> <?php  echo ''.$fexa2d[2].'/'.$fexa2d[1].'/'.$fexa2d[0].' '.$fexa2[1].'';?></td>
+      <?php  $ivx++; 
+			            if($ivx=="3"){echo'</tr><tr>'; $ivx=0;}
+			}?>
+      <?php  
+$checa_arrayx=array_search("convenio",$camposex);
+if($checa_arrayx===FALSE){} else{
+?>          
+      <td bgcolor="#ffffff"><strong>Convenio:</strong> <?php  echo $convenio;?></td>      <?php  $ivx++; 
+			            if($ivx=="3"){echo'</tr><tr>'; $ivx=0;}
+			}?>
+      <?php  
+$checa_arrayx=array_search("inciso",$camposex);
+if($checa_arrayx===FALSE){} else{
+?>          
+      <td bgcolor="#ffffff"><strong>Inciso:</strong> <?php  echo $inciso;?></td>             <?php  $ivx++; 
+			            if($ivx=="3"){echo'</tr><tr>'; $ivx=0;}
+			}?>
+
+      <td bgcolor="#ffffff"><strong>N&uacute;mero de contrato:</strong> <?php  echo $num_contrato;?></td>   <?php  $ivx++; 
+			            if($ivx=="3"){echo'</tr><tr>'; $ivx=0;}
+			?>  
+      <td bgcolor="#ffffff"><strong>Expediente:</strong> <?php  echo $expediente;?></td>   <?php  $ivx++; 
+			            if($ivx=="3"){echo'</tr><tr>'; $ivx=0;}
+			?>  
+      <td bgcolor="#ffffff"><strong>Nombre del cliente:</strong> <?php  echo $num_cliente;?></td>  <?php  $ivx++; 
+			            if($ivx=="3"){echo'</tr><tr>'; $ivx=0;}
+			?>
+        <?php  
+$checa_arrayx=array_search("num_siniestro",$camposex);
+if($checa_arrayx===FALSE){} else{
+?>          
+          <td bgcolor="#ffffff"><strong>N&uacute;mero del siniestro:</strong> <?php  echo $num_siniestro;?></td>
+ <?php  $ivx++; 
+			            if($ivx=="3"){echo'</tr><tr>'; $ivx=0;}
+			}?>
+          <?php  
+$checa_arrayx=array_search("usuario",$camposex);
+if($checa_arrayx===FALSE){} else{
+?>          
+      <td bgcolor="#ffffff"><strong>Usuario:</strong> <?php  echo $usuario;?></td>
+ <?php  $ivx++; 
+			            if($ivx=="3"){echo'</tr><tr>'; $ivx=0;}
+			}?>
+      
+      <?php  
+$checa_arrayx=array_search("reporte_cliente",$camposex);
+if($checa_arrayx===FALSE){} else{
+?>          
+            <td bgcolor="#ffffff"><strong>Reporte cliente:</strong> <?php  echo $reporte_cliente;?></td>
+ <?php  $ivx++; 
+			            if($ivx=="3"){echo'</tr><tr>'; $ivx=0;}
+			}?>
+    </tr>
+       
+       <tr><td colspan=3 align="right" bgcolor="#FFFFFF"><strong>[ <a href="?module=editausuariox&id=<?php  echo $id;?>">Editar</a>]</strong></td>
+       </tr>
+       
+   </table>
+        <?php  
+}
+	?>
+       
+              <?php  
+$checa_array=array_search("detalles_servicio",$camposex);
+$checa_array2=array_search("tecnico_solicitado",$camposex);
+$checa_array3=array_search("motivo_servicio",$camposex);
+$checa_array4=array_search("ubicacion_requiere",$camposex);
+$checa_array5=array_search("tipo_asistencia_vial",$camposex);
+$checa_array6=array_search("tipo_asistencia_medica",$camposex);
+$checa_array7=array_search("domicilio_cliente",$camposex);
+$checa_array8=array_search("domicilio_sustituto",$camposex);
+$checa_array9=array_search("ubicacion_estado",$camposex);
+$checa_array10=array_search("ubicacion_municipio",$camposex);
+$checa_array11=array_search("ubicacion_colonia",$camposex);
+$checa_array12=array_search("ubicacion_ciudad",$camposex);
+$checa_array13=array_search("destino_servicio",$camposex);
+$checa_array14=array_search("destino_estado",$camposex);
+$checa_array15=array_search("destino_municipio",$camposex);
+$checa_array16=array_search("destino_colonia",$camposex);
+$checa_array17=array_search("destino_ciudad",$camposex);
+$checa_array18=array_search("formato_carta",$camposex);
+$checa_array19=array_search("instructivo",$camposex);
+if($checa_array===FALSE && $checa_array2===FALSE && $checa_array3===FALSE && $checa_array4===FALSE && $checa_array5===FALSE && $checa_array6===FALSE && $checa_array7===FALSE && $checa_array8===FALSE && $checa_array9===FALSE && $checa_array10===FALSE && $checa_array11===FALSE && $checa_array12===FALSE && $checa_array13===FALSE && $checa_array14===FALSE && $checa_array15===FALSE && $checa_array16===FALSE && $checa_array17===FALSE && $checa_array18===FALSE && $checa_array19===FALSE){} else{
+	?>
+      <table width="100%" border="0" cellspacing="3" cellpadding="3">
+    <tr>
+      <td colspan="3" bgcolor="#CCCCCC"><strong>Detalles del servicio</strong> </td>
+      </tr></table> <div id="servisuservisu"> <?php  
+      include('servisuservisu.php'); 
+	  ?>  
+      </div>
+      <?php        }	  ?>
+      
+       <?php  
+$checa_array=array_search("informacion_vehiculo",$camposex);
+$checa_array2=array_search("auto_marca",$camposex);
+$checa_array3=array_search("auto_tipo",$camposex);
+$checa_array4=array_search("auto_modelo",$camposex);
+$checa_array5=array_search("auto_color",$camposex);
+$checa_array6=array_search("auto_placas",$camposex);
+if($checa_array===FALSE && $checa_array2===FALSE && $checa_array3===FALSE && $checa_array4===FALSE && $checa_array5===FALSE && $checa_array6===FALSE){} else{
+	?>
+    <table width="100%" border="0" cellspacing="3" cellpadding="3">
+    <tr>
+      <td colspan="3" bgcolor="#CCCCCC"><strong>Informaci&oacute;n del veh&iacute;culo</strong> </td>
+      </tr></table><div id="datosvehiculo">
+          <?php  
+include ("datos_vehiculo.php");
+	?>
+
+      </div>   
+      <?php  } ?>
+                    <?php  
+$checa_array=array_search("informacion_poliza",$camposex);
+if($checa_array===FALSE){} else{
+	?>
+      <table width="100%" border="0" cellspacing="3" cellpadding="3">
+       <tr>
+      <td colspan="3" bgcolor="#CCCCCC"><strong>Informaci&oacute;n de la p&oacute;liza</strong></td>
+    </tr></table>
+    <div id="infopoliza">
+    <?php  
+include ("info_poliza.php");
+	?>
+     
+    </div>
+          <?php        }	  ?>
+                          <?php  
+$checa_array=array_search("informacion_legal",$camposex);
+if($checa_array===FALSE){} else{
+	?>
+
+          <table width="100%" border="0" cellspacing="3" cellpadding="3">
+    <tr>
+      <td colspan="3" bgcolor="#CCCCCC"><strong>Situaci&oacute;n Jur&iacute;dica </strong></td>
+      </tr></table>
+	  <div id="situacion" style="display:block">
+	  <?php  
+	  $db = mysql_connect($host,$username,$pass);
+mysql_select_db($database,$db);
+$result = mysql_query("SELECT * from seguimiento_juridico where general = '$id'",$db);
+if (mysqli_num_rows($result)){ 
+$situacion_conductor=mysql_result($result,0,"situacion_juridica");
+$detencion=mysql_result($result,0,"detencion");
+$detencion=explode("-",$detencion);
+$liberacion=mysql_result($result,0,"liberacion");
+$liberacion=explode("-",$liberacion);
+$fianzas=mysql_result($result,0,"fianzas");
+$situacion_vehiculo=mysql_result($result,0,"situacion_vehiculo");
+$detencion_vehiculo=mysql_result($result,0,"detencion_vehiculo");
+$detencion_vehiculo=explode("-",$detencion_vehiculo);
+$liberacion_vehiculo=mysql_result($result,0,"liberacion_vehiculo");
+$liberacion_vehiculo=explode("-",$liberacion_vehiculo);
+$fianzas_vehiculo=mysql_result($result,0,"fianzas_vehiculo");
+}
+
+	  ?>
+	  <table width="100%" border="0" cellspacing="3" cellpadding="3">
+          <tr>
+            <td bgcolor="#ffffff"><strong>Situaci&oacute;n del conductor: </strong> <?php  echo $situacion_conductor;?></td>
+            <td bgcolor="#ffffff"><strong>Detenci&oacute;n:</strong>  <?php  echo ''.$detencion[2].'/'.$detencion[1].'/'.$detencion[0].'';?></td>
+            <td bgcolor="#ffffff"><strong>Liberaci&oacute;n:</strong>  <?php  echo ''.$liberacion[2].'/'.$liberacion[1].'/'.$liberacion[0].'';?></td>
+          </tr>
+          <tr>
+            <td colspan="3" bgcolor="#ffffff"><strong>Fianzas y/o cauci&oacute;n:</strong> <?php  echo nl2br($fianzas);?></td>
+          </tr>
+          <tr>
+            <td bgcolor="#ffffff"><strong>Situaci&oacute;n del veh&iacute;culo: </strong> <?php  echo $situacion_vehiculo;?></td>
+            <td bgcolor="#ffffff"><strong>Detenci&oacute;n:</strong> <?php  echo ''.$detencion_vehiculo[2].'/'.$detencion_vehiculo[1].'/'.$detencion_vehiculo[0].'';?></td>
+            <td bgcolor="#ffffff"><strong>Liberaci&oacute;n:</strong> <?php  echo ''.$liberacion_vehiculo[2].'/'.$liberacion_vehiculo[1].'/'.$liberacion_vehiculo[0].'';?></td>
+          </tr>
+          <tr>
+            <td colspan="3" bgcolor="#ffffff"><strong>Fianzas y/o cauci&oacute;n:</strong> <?php  echo nl2br($fianzas_vehiculo);?></td>
+          </tr>
+          <tr>
+            <td colspan="3" align="right" bgcolor="#ffffff"><strong>[ <a href="javascript:FAjax('editar.php?id=<?php  echo $id;?>&caso=situacion&flim-flam=new Date().getTime();','situacion','','get');">Editar</a> ]</strong> </td>
+          </tr>
+
+</table></div>
+<table width="100%" border="0" cellspacing="3" cellpadding="3">
+    <tr>
+      <td colspan="3" bgcolor="#CCCCCC"><strong>Detalle del Siniestro</strong></td>
+      </tr></table>
+<div id="siniestro">
+
+<?php  
+$db = mysql_connect($host,$username,$pass);
+mysql_select_db($database,$db);
+$result = mysql_query("SELECT * from seguimiento_juridico where general = '$id'",$db);
+if (mysqli_num_rows($result)){ 
+$conductor=mysql_result($result,0,"conductor");
+$tel1=mysql_result($result,0,"telconductor");
+$tel2=mysql_result($result,0,"telconductor2");
+$siniestro=mysql_result($result,0,"siniestro");
+$averiguacion=mysql_result($result,0,"averiguacion");
+$autoridad=mysql_result($result,0,"autoridad");
+$fecha_accidente=mysql_result($result,0,"fecha_accidente");
+$fecha_accidente=explode("-",$fecha_accidente);
+$numlesionados=mysql_result($result,0,"numlesionados");
+$numhomicidios=mysql_result($result,0,"numhomicidios");
+$delitos=mysql_result($result,0,"delitos");
+$danos=mysql_result($result,0,"danos");
+$lesiones=mysql_result($result,0,"lesiones");
+$homicidios=mysql_result($result,0,"homicidios");
+$ataques=mysql_result($result,0,"ataques");
+$robo=mysql_result($result,0,"robo");
+$descripcion=mysql_result($result,0,"descripcion");
+$lugar_hechos=mysql_result($result,0,"lugar_hechos");
+$referencias=mysql_result($result,0,"referencias");
+$colonia=mysql_result($result,0,"colonia");
+$ciudad=mysql_result($result,0,"ciudad");
+$municipio=mysql_result($result,0,"municipio");
+$estado=mysql_result($result,0,"estado");
+$ajustador=mysql_result($result,0,"ajustador");
+$telajustador1=mysql_result($result,0,"telajustador");
+$telajustador2=mysql_result($result,0,"telajustador2");
+$monto_danos=mysql_result($result,0,"monto_danos");
+$monto_deducible=mysql_result($result,0,"monto_deducible");
+}
+
+$db = mysql_connect($host,$username,$pass);
+mysql_select_db($database,$db);
+$result = mysql_query("SELECT * from Colonia where idColonia = '$colonia'",$db);
+if (mysqli_num_rows($result)){ 
+$colonia=mysql_result($result,0,"NombreColonia");
+}
+
+$db = mysql_connect($host,$username,$pass);
+mysql_select_db($database,$db);
+$result = mysql_query("SELECT * from Estado where idEstado = '$estado'",$db);
+if (mysqli_num_rows($result)){ 
+$estado=mysql_result($result,0,"NombreEstado");
+}
+
+$db = mysql_connect($host,$username,$pass);
+mysql_select_db($database,$db);
+$result = mysql_query("SELECT * from Municipio where idMunicipio = '$municipio'",$db);
+if (mysqli_num_rows($result)){ 
+$municipio=mysql_result($result,0,"NombreMunicipio");
+}
+?>
+
+<table width="100%" border="0" cellspacing="3" cellpadding="3">
+          <tr>
+            <td bgcolor="#FFFFFF"><strong>Conductor:</strong> <?php  echo $conductor; ?></td>
+            <td bgcolor="#FFFFFF"><strong>Tel&eacute;fono1:</strong> <?php  echo $tel1; ?></td>
+            <td bgcolor="#FFFFFF"><strong>Tel&eacute;fono2:</strong> <?php  echo $tel2; ?></td>
+          </tr>
+          <tr>
+            <td bgcolor="#FFFFFF"><strong>Siniestro:</strong> <?php  echo $siniestro; ?></td>
+            <td bgcolor="#FFFFFF"><strong>Averiguaci&oacute;n previa: </strong> <?php  echo $averiguacion; ?></td>
+            <td bgcolor="#FFFFFF"><strong>Autoridad:</strong> <?php  echo $autoridad; ?></td>
+          </tr>
+          <tr>
+            <td bgcolor="#FFFFFF"><strong>Fecha del accidente: </strong> <?php  echo''.$fecha_accidente[2].'/'.$fecha_accidente[1].'/'.$fecha_accidente[0].''; ?></td>
+            <td bgcolor="#FFFFFF"><strong>N&uacute;mero de lesionados: </strong> <?php  echo $numlesionados; ?></td>
+            <td bgcolor="#FFFFFF"><strong>N&uacute;mero de homicidios: </strong> <?php  echo $numhomicidios; ?></td>
+          </tr>
+          <tr>
+            <td colspan="3" bgcolor="#FFFFFF"><table width="100%" border="0" cellspacing="3" cellpadding="3">
+                <tr>
+                  <td><strong>Delitos:</strong> 
+				   <?php  /* if($delitos=="si"){echo'S�';} else{echo'No';} */ ?>
+				  </td>
+                  <td><strong>Da&ntilde;os:</strong>
+				  <?php  if($danos=="si"){echo'S�';} else{echo'No';} ?>				  
+				  </td>
+                  <td><strong>Lesiones:</strong>
+				  				 <?php  if($lesiones=="si"){echo'S�';} else{echo'No';} ?>
+				  </td>
+                  <td><strong>Homicidios:</strong>
+				  				  <?php  if($homicidios=="si"){echo'S�';} else{echo'No';} ?>
+				  </td>
+                  <td><strong>Ataques:</strong>
+				<?php   if($ataques=="si"){echo'S�';} else{echo'No';} ?>
+				  </td>
+                  <td><strong>Robo:</strong>
+				<?php    if($robo=="si"){echo'S�';} else{echo'No';}	?>
+				  </td>
+                </tr>
+            </table></td>
+          </tr>
+          <tr>
+            <td colspan="3" bgcolor="#FFFFFF"><strong>Descripci&oacute;n:</strong><br> <?php  echo nl2br($descripcion); ?></td>
+          </tr>
+          <tr>
+            <td bgcolor="#FFFFFF"><strong>Lugar de los hechos: </strong>  <?php   echo $lugar_hechos; ?></td>
+            <td bgcolor="#FFFFFF"><strong>Referencias:</strong>  <?php   echo $referencias; ?></td>
+            <td bgcolor="#FFFFFF"><strong>Colonia:</strong>  <?php   echo $colonia; ?></td>
+          </tr>
+          <tr>
+            <td bgcolor="#FFFFFF"><strong>Ciudad:</strong>  <?php   echo $ciudad; ?></td>
+            <td bgcolor="#FFFFFF"><strong>Municipio:</strong>  <?php   echo $municipio; ?></td>
+            <td bgcolor="#FFFFFF"><strong>Estado:</strong>  <?php   echo $estado; ?></td>
+          </tr>
+          <tr>
+            <td bgcolor="#FFFFFF"><strong>Ajustador:</strong>  <?php   echo $ajustador; ?></td>
+            <td bgcolor="#FFFFFF"><strong>Tel&eacute;fono1:</strong>  <?php   echo $telajustador1; ?></td>
+            <td bgcolor="#FFFFFF"><strong>Tel&eacute;fono2:</strong>  <?php   echo $telajustador2; ?></td>
+          </tr>
+          <tr>
+            <td bgcolor="#FFFFFF"><strong>Monto da&ntilde;os: </strong> $<?php   echo number_format($monto_danos,2); ?></td>
+            <td bgcolor="#FFFFFF"><strong>Monto Deducible: </strong>$<?php   echo number_format($monto_deducible,2); ?></td>
+            <td align="right" bgcolor="#FFFFFF"><strong>[ <a href="javascript:FAjax('editar.php?id=<?php  echo $id; ?>&caso=siniestro&flim-flam=new Date().getTime();','siniestro','','get');">Editar</a> ]</strong></td>
+          </tr>
+        </table>
+</div>
+    	  <table width="100%" border="0" cellspacing="3" cellpadding="3">
+    <tr>
+      <td colspan="3" bgcolor="#CCCCCC"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td><strong>Terceros</strong></td><td align="right"><b>[ <a href="javascript:FAjax('terceros.php?id=<?php  echo $id; ?>&caso=nuevo&flim-flam=new Date().getTime();','terceros','','get');">Agregar Tercero</a> ]</b></td>
+        </tr>
+      </table>        </td>
+      </tr>
+  </table>
+  <div id="terceros">
+  <?php  
+$link = mysql_connect($host, $username, $pass); 
+mysql_select_db($database, $link); 
+$result = mysql_query("SELECT * FROM terceros where general='$id' order by tipo desc, nombre", $link); 
+if (mysqli_num_rows($result)){ 
+  while ($row = @mysqli_fetch_array($result)) { 
+
+$colonia=$row["colonia"];
+$municipio=$row["municipio"];
+$estado=$row["estado"];
+
+$dbw = mysql_connect($host,$username,$pass);
+mysql_select_db($database,$dbw);
+$resultw = mysql_query("SELECT * from Colonia where idColonia = '$colonia'",$dbw);
+if (mysqli_num_rows($resultw)){ 
+$colonia=mysql_result($resultw,0,"NombreColonia");
+}
+
+$dbw = mysql_connect($host,$username,$pass);
+mysql_select_db($database,$dbw);
+$resultw = mysql_query("SELECT * from Estado where idEstado = '$estado'",$dbw);
+if (mysqli_num_rows($resultw)){ 
+$estado=mysql_result($resultw,0,"NombreEstado");
+}
+
+$dbw = mysql_connect($host,$username,$pass);
+mysql_select_db($database,$dbw);
+$resultw = mysql_query("SELECT * from Municipio where idMunicipio = '$municipio'",$dbw);
+if (mysqli_num_rows($resultw)){ 
+$municipio=mysql_result($resultw,0,"NombreMunicipio");
+}
+
+echo' <table width="100%" border="0" cellspacing="3" cellpadding="3">
+		  <tr>
+		    <td bgcolor="#FFFFFF"><strong>Tipo:</strong> '.$row["tipo"].'</td>
+		    <td colspan="2" bgcolor="#FFFFFF"><strong>Nombre:</strong> '.$row["nombre"].'</td>
+		    </tr>
+		  <tr>
+		    <td bgcolor="#FFFFFF"><strong>';
+			
+if($row["tipo"]=="Persona"){echo'Grado de lesi&oacute;n:';}
+else{echo'Da&ntilde;o estimado:';}			
+			
+			echo'</strong> '.$row["dano_lesion"].'</td>
+		    <td bgcolor="#FFFFFF"><strong>Tel&eacute;fono1:</strong> '.$row["tel1"].'</td>
+		    <td bgcolor="#FFFFFF"><strong>Tel&eacute;fono2:</strong> '.$row["tel2"].'</td>
+		  </tr>
+		  <tr>
+		    <td colspan="3" bgcolor="#FFFFFF"><strong>Descripci&oacute;n del da&ntilde;o: </strong><br>'.nl2br($row["descripcion"]).'</td>
+		    </tr>
+		  <tr>
+		    <td colspan="3" bgcolor="#FFFFFF"><strong>Comentarios:</strong><br> '.nl2br($row["comentarios"]).'</td>
+		    </tr>
+		  <tr>
+		    <td bgcolor="#FFFFFF"><strong>Calle:</strong> '.$row["calle"].'</td>
+		    <td bgcolor="#FFFFFF"><strong>Ciudad:</strong> '.$row["ciudad"].'</td>
+		    <td bgcolor="#FFFFFF"><strong>C.P.:</strong> '.$row["cp"].'</td>
+		  </tr>
+		  <tr>
+		    <td bgcolor="#FFFFFF"><strong>Estado:</strong> '.$estado.'</td>
+		    <td bgcolor="#FFFFFF"><strong>Municipio:</strong> '.$municipio.'</td>
+		    <td bgcolor="#FFFFFF"><strong>Colonia:</strong> '.$colonia.'</td>
+		  </tr>
+		  <tr>
+		    <td bgcolor="#FFFFFF">&nbsp;</td>
+		    <td bgcolor="#FFFFFF">&nbsp;</td>
+		    <td align="right" bgcolor="#FFFFFF"><strong>[ <a href="javascript:FAjax(\'terceros.php?id='.$id.'&idtercero='.$row["id"].'&caso=editar&flim-flam=new Date().getTime();\',\'terceros\',\'\',\'get\');">Editar</a>  | <a href="javascript:confirmborra('.$id.','.$row["id"].');">Eliminar</a> ]</strong></td>
+		    </tr>
+	    </table>  ';
+
+
+}
+
+}
+
+
+  ?>
+    	 
+  </div>
+  </td>
+</tr></table>
+          <?php        }	  ?>
+<table width="100%" border="0" cellspacing="0" cellpadding="6">
+
+  <tr>
+<td height=50>
+
+
+
+	
+	</td>
+
+  </tr>
+
+</table>
+
